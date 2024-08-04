@@ -1,0 +1,31 @@
+module(name = "rules_cpan_example", version = "0.0.0")
+
+bazel_dep(name = "rules_perl")
+git_override(
+    # https://github.com/bazelbuild/rules_perl/pull/62
+    module_name = "rules_perl",
+    remote = "https://github.com/lalten/rules_perl",
+    commit = "973efb79defe0c417aa9655ac24a09148d599e9e",
+)
+
+bazel_dep(name = "rules_cpan")
+local_path_override(
+    module_name = "rules_cpan",
+    path = "..",
+)
+
+cpan = use_extension("@rules_cpan//cpan:extensions.bzl", "cpan")
+cpan.install(
+    name = "cpan_deps",
+    lock = "//:cpanfile.snapshot.lock.json",
+)
+use_repo(cpan, "cpan_deps")
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "lcov",
+    build_file = "//:lcov.BUILD",
+    url = "https://github.com/linux-test-project/lcov/releases/download/v2.1/lcov-2.1.tar.gz",
+    integrity = "sha256-TQHZ9VGj8OhozoR0L7YKrEQH4/wWImNaB+KdcOOPH68=",
+    strip_prefix = "lcov-2.1",
+)
