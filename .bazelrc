@@ -1,0 +1,1 @@
+common --registry https://raw.githubusercontent.com/lalten/bazel-central-registry/rules_perl-includes_attr
