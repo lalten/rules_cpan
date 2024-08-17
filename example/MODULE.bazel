@@ -1,12 +1,6 @@
 module(name = "rules_cpan_example", version = "0.0.0")
 
-bazel_dep(name = "rules_perl")
-git_override(
-    # https://github.com/bazelbuild/rules_perl/pull/62
-    module_name = "rules_perl",
-    remote = "https://github.com/lalten/rules_perl",
-    commit = "973efb79defe0c417aa9655ac24a09148d599e9e",
-)
+bazel_dep(name = "rules_perl", version = "0.2.3.bcr.1")
 
 bazel_dep(name = "rules_cpan")
 local_path_override(
