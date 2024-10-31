@@ -5,7 +5,7 @@ load("@rules_perl//perl:perl.bzl", "perl_library")
 
 perl_library(
     name = "{distribution}",
-    srcs = glob(["lib/**/*"]),
+    srcs = glob(["**/*"], exclude=["t/**/*", "xt/**/*"]),
     visibility = ["//visibility:public"],
 )
 """
