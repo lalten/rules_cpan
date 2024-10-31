@@ -18,7 +18,7 @@ load("@rules_perl//perl:perl.bzl", "perl_library")
 exports_files(["**/*"])
 
 perl_library(
-    name = "{repo}",
+    name = "{main_target_name}",
     deps = {deps},
     visibility = ["//visibility:public"],
 )
@@ -37,7 +37,7 @@ def _install_impl(rctx):
         rctx.file(distribution + "/BUILD", _MODULE_BUILD_TEMPLATE.format(distribution = distribution), executable = False)
 
     rctx.file("BUILD", _REPO_BUILD_TEMPLATE.format(
-        repo = rctx.name.split("~")[-1],
+        main_target_name = rctx.attr.main_target_name,
         deps = ["//" + dep for dep in lockfile.keys()],
     ), executable = False)
     rctx.file("WORKSPACE", "", executable = False)
@@ -45,6 +45,7 @@ def _install_impl(rctx):
 install = repository_rule(
     attrs = {
         "lock": attr.label(allow_single_file = True, doc = "cpanfile snapshot lock file"),
+        "main_target_name": attr.string(mandatory = True, doc = "The name of the top-level perl_library target. Ideally the same as the repo name."),
     },
     implementation = _install_impl,
 )
