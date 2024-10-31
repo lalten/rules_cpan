@@ -6,6 +6,7 @@ def _cpan_impl(module_ctx):
             install(
                 name = attr.name,
                 lock = attr.lock,
+                main_target_name = attr.name,
             )
 
 cpan = module_extension(
