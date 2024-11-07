@@ -4,9 +4,19 @@ on:
     branches: [main]
   pull_request:
 jobs:
-  test:
+  tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        bazel_version: [7.x, 8.0.0rc2]
     steps:
       - uses: actions/checkout@v4
       - run: bazel test //...
         working-directory: example
+        env:
+          USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
+  test:
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - run: echo "Tests passed!"
